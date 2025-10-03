@@ -15,21 +15,19 @@ jobs:
 
     env:
       AWS_REGION: "${{ vars.AWS_REGION }}"
-      TF_WORKING_DIR: ./terraform # path to your Terraform config
+      TF_WORKING_DIR: ./terraform
 
     steps:
-      # 1. Checkout repository
       - name: Checkout repo
         uses: actions/checkout@v3
-# 2. Setup Terraform
+        
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v2  # ← Consider upgrading to v3
         with:
           terraform_version: 1.9.8
 
-      # 3. Configure AWS credentials
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}      
+          aws-region: ${{ vars.AWS_REGION }}
