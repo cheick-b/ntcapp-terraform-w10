@@ -4,7 +4,7 @@
         {
             "Effect": "Allow",
             "Principal": {
-                "Federated": "arn:aws:iam::YOUR_ACCOUNT:oidc-provider/token.actions.githubusercontent.com"
+                "Federated": "arn:aws:iam::366019841221:oidc-provider/token.actions.githubusercontent.com"
             },
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
@@ -12,7 +12,7 @@
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
                 },
                 "StringLike": {
-                    "token.actions.githubusercontent.com:sub": "repo:your-org/your-repo:*"
+                    "token.actions.githubusercontent.com:sub": "repo:cheick-b/ntcapp-terraform-w10:*"
                 }
             }
         }
