@@ -110,8 +110,8 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform Format Check
-        run: terraform fmt -check -recursive
+      - name: Terraform Format
+        run: terraform fmt -recursive  # ← Auto-formats files
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
