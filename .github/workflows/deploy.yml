@@ -20,12 +20,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: TFSec Security Scan
-        uses: aquasecurity/tfsec@v1.28.4  # ← Fixed: Use version tag
+        uses: aquasecurity/tfsec@v1.28.4
         with:
           soft-fail: true
 
       - name: Checkov Security Scan
-        uses: bridgecrewio/checkov-action@v1.0.0  # ← Fixed: Use version tag
+        uses: bridgecrewio/checkov-action@v30
         with:
           directory: .
           framework: terraform
@@ -59,24 +59,20 @@ jobs:
         run: terraform init
 
       - name: Setup Infracost
-        uses: infracost/actions/setup@v2  # ← This one is fine
-        with:
-          api-key: ${{ secrets.INFRACOST_API_KEY }}
-      
-      - name: Generate Cost Report
-        run: |
-          infracost breakdown --path . \
-            --format table \
-            --out-file infracost.txt
-          cat infracost.txt
+        uses: infracost/actions/setup@v2  # ← This is correct
 
-      - name: Post Cost to PR
-        if: github.event_name == 'pull_request'
-        uses: infracost/actions/comment@v2  # ← This one is fine
-        with:
-          path: infracost.json
-          behavior: update
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate Cost Report
+        env:
+          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+        run: |
+          # Generate JSON output for PR comments
+          infracost breakdown --path . --format json --out-file infracost.json
+          
+          # Generate human-readable output for logs
+          infracost breakdown --path . --format table
+          
+          # Post comment to PR
+          infracost comment github --path infracost.json --repo $GITHUB_REPOSITORY --github-token ${{ secrets.GITHUB_TOKEN }} --behavior update
 
   # TERRAFORM DEPLOYMENT
   terraform-deploy:
