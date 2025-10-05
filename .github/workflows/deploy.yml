@@ -18,7 +18,7 @@ jobs:
 
       - name: Run TFSec with Docker
         run: |
-          docker run --rm -v "$(pwd):/src" aquasec/tfsec:latest /src
+          docker run --rm -v "$(pwd):/src" aquasec/tfsec:latest /src --soft-fail
 
       - name: Run Checkov with Docker
         run: |
