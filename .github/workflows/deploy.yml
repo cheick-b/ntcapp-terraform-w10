@@ -17,14 +17,14 @@ jobs:
 
     env:
       AWS_REGION: "${{ secrets.AWS_REGION }}"
-      TF_WORKING_DIR: "./terraform"
+      # REMOVED: TF_WORKING_DIR: ./terraform  ← Delete this line
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4  # ← Updated to v4
+        uses: actions/checkout@v4
         
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3  # ← Updated to v3
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.8
 
@@ -33,17 +33,14 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
-          role-session-name: GitHubActions-Terraform  # ← Optional but helpful
 
-      # Add your Terraform workflow steps here
       - name: Terraform Init
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform init
+        run: terraform init    # ← No working-directory needed
 
       - name: Terraform Validate
-        working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform validate
 
       - name: Terraform Plan
-        working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform plan
+
+    
